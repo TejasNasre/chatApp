@@ -2,11 +2,14 @@ import React, { Children } from "react";
 import Header from "../Components/Header";
 import { useState, useEffect } from "react";
 import { databases } from "../appWriteConfig";
-import { ID, Query } from "appwrite";
+import { ID, Permission, Role } from "appwrite";
 import { AiFillDelete } from "react-icons/ai";
 import client from "../appWriteConfig";
+import { useAuth } from "../Context/AuthContext";
 
 export default function Room() {
+  const { user } = useAuth();
+
   const [messages, setMessages] = useState([]);
   const [messageBody, setMessageBody] = useState("");
 
@@ -14,14 +17,21 @@ export default function Room() {
     e.preventDefault();
 
     let payload = {
+      user_id: user.$id,
+      username: user.name,
       body: messageBody,
     };
+
+    let permission = [
+      Permission.write(Role.user(user.$id)), // User can write this document
+    ];
 
     const response = await databases.createDocument(
       import.meta.env.VITE_APPWRITE_DATABASE_ID,
       import.meta.env.VITE_APPWRITE_MESSAGES_COLLECTION_ID,
       ID.unique(),
-      payload
+      payload,
+      permission
     );
     setMessageBody("");
   };
@@ -59,7 +69,7 @@ export default function Room() {
             "databases.*.collections.*.documents.*.create"
           )
         ) {
-          console.log(`New message created: ${response.payload.$id}`);
+          // console.log(`New message created: ${response.payload.$id}`);
           setMessages((prev) => [...prev, response.payload]);
         }
 
@@ -68,7 +78,7 @@ export default function Room() {
             "databases.*.collections.*.documents.*.delete"
           )
         ) {
-          console.log(`Message deleted: ${response.payload.$id}`);
+          // console.log(`Message deleted: ${response.payload.$id}`);
           setMessages((prev) =>
             prev.filter((message) => message.$id !== response.payload.$id)
           );
@@ -86,7 +96,36 @@ export default function Room() {
       <main className="container">
       <Header />
         <div className="room--container">
-          
+          <div className="overflow-chat">
+            {messages.map((message) => (
+              <div key={message.$id} className="message--wrapper">
+                <div className="message--header">
+                  <p>
+                    {message?.username ? (
+                      <span>{message.username}</span>
+                    ) : (
+                      <span>Anonymous User</span>
+                    )}
+                    <small className="message-timestamp">
+                      {new Date(message.$createdAt).toLocaleString()}
+                    </small>
+                  </p>
+                  {message.$permissions.includes(
+                    `delete(\"user:${user.$id}"\)`
+                  ) && (
+                    <AiFillDelete
+                      onClick={() => deleteMessage(message.$id)}
+                      className="delete--btn"
+                    />
+                  )}
+                </div>
+                <div className="message--body">
+                  <p>{message.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="message--container">
           <form id="message--form" onSubmit={handleSubmit}>
             <div>
               <textarea
@@ -106,24 +145,6 @@ export default function Room() {
               />
             </div>
           </form>
-
-          <div>
-            {messages.map((message) => (
-              <div key={message.$id} className="message--wrapper">
-                <div className="message--header">
-                  <small className="message-timestamp">
-                    {new Date(message.$createdAt).toLocaleString()}
-                  </small>
-                  <AiFillDelete
-                    onClick={() => deleteMessage(message.$id)}
-                    className="delete--btn"
-                  />
-                </div>
-                <div className="message--body">
-                  <p>{message.body}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </main>
