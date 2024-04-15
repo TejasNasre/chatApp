@@ -9,7 +9,7 @@ const Header = () => {
     <div id="header--wrapper">
       {user ? (
         <>
-          Welcome {user.name}
+          Welcome To Dev Talk {user.name}
           <IoLogOutSharp className="header--link" onClick={handleUserLogout} />
         </>
       ) : (

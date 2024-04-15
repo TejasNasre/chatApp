@@ -128,19 +128,20 @@ export default function Room() {
           <div className="message--container">
           <form id="message--form" onSubmit={handleSubmit}>
             <div>
-              <textarea
+              <input
+                type="text"
                 required
                 maxLength="1000"
                 placeholder="Type your message here..."
                 onChange={(e) => setMessageBody(e.target.value)}
                 name="message"
                 value={messageBody}
-              ></textarea>
+              ></input>
             </div>
             <div className="send-btn--wrapper">
               <input
                 type="submit"
-                value="send"
+                value="Talk!"
                 className="btn btn--secondary"
               />
             </div>

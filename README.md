@@ -9,4 +9,4 @@ Dev Talk is a real-time chat application designed specifically for developers. C
 - End-to-end encrypted: Your messages are secure and private.
 
 
-## Live Url : https://dev-talk-wdtd.onrender.com
+## Live Url : https://do-dev-talk.vercel.app
