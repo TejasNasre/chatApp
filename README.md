@@ -1,8 +1,12 @@
-# React + Vite
+# Dev Talk - A RealTime Chat App For Developers
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dev Talk is a real-time chat application designed specifically for developers. Connect, collaborate, and share ideas with like-minded individuals in an engaging and user-friendly environment.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Real-time messaging: Send and receive messages instantly.
+- Developer-friendly: Connect with other developers and share ideas.
+- End-to-end encrypted: Your messages are secure and private.
+
+
+## Live Url : https://dev-talk-wdtd.onrender.com
